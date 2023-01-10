@@ -1,6 +1,17 @@
 ﻿using EvmosGenesisParser.Models;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Data.SQLite;
+using Dapper;
+using System.Data;
+using System.Security.Principal;
+using System.Numerics;
+
+Console.WriteLine("Creating the SQLite database...");
+
+using var connection = new SQLiteConnection("DataSource=D:\\Projects\\mine\\evmos-genesis-parser\\EvmosGenesisParser\\genesis.sqlite3;New=True");
+await connection.OpenAsync();
+
+await CreateTablesAsync(connection);
 
 Console.WriteLine("Reading the Genesis...");
 
@@ -11,7 +22,7 @@ while (reader.Read())
 {
     if (reader.TokenType == JsonToken.StartArray && reader.Path == "app_state.auth.accounts")
     {
-        ParseAuthAccounts(reader);
+        await ParseAuthAccountsAsync(reader, connection);
     }
 
     if (reader.TokenType == JsonToken.StartObject && reader.Path == "app_state.auth.params")
@@ -26,7 +37,7 @@ while (reader.Read())
 
     if (reader.TokenType == JsonToken.StartArray && reader.Path == "app_state.bank.balances")
     {
-        ParseBankBalances(reader);
+        await ParseBankBalancesAsync(reader, connection);
     }
 
     if (reader.TokenType == JsonToken.StartArray && reader.Path == "app_state.bank.denom_metadata")
@@ -41,7 +52,7 @@ while (reader.Read())
 
     if (reader.TokenType == JsonToken.StartArray && reader.Path == "app_state.bank.supply")
     {
-        ParseBankSupply(reader);
+        await ParseBankSupplyAsync(reader, connection);
     }
 
     if (reader.TokenType == JsonToken.StartObject && reader.Path == "app_state.capability")
@@ -51,7 +62,7 @@ while (reader.Read())
 
     if (reader.TokenType == JsonToken.StartArray && reader.Path == "app_state.claims.claims_records")
     {
-        ParseClaimRecords(reader);
+        await ParseClaimRecordsAsync(reader, connection);
     }
 
     if (reader.TokenType == JsonToken.StartObject && reader.Path == "app_state.claims.params")
@@ -236,13 +247,11 @@ while (reader.Read())
     {
         ParseValidators(reader);
     }
-
-    // Console.WriteLine(reader.Path);
 }
 
 Console.WriteLine("Done");
 
-void ParseAuthAccounts(JsonTextReader reader)
+async Task ParseAuthAccountsAsync(JsonTextReader reader, IDbConnection connection)
 {
     Console.WriteLine("Parsing accounts...");
     var count = 0;
@@ -251,25 +260,21 @@ void ParseAuthAccounts(JsonTextReader reader)
         if (reader.TokenType == JsonToken.EndArray && reader.Path == "app_state.auth.accounts") break;
         if (reader.TokenType == JsonToken.StartObject && reader.Path.EndsWith("base_account"))
         {
-            if (TryParseBaseAccount(reader))
+            if (TryParseBaseAccount(reader, out var account))
             {
+                await connection.ExecuteAsync("INSERT INTO auth_accounts VALUES (@Address)", account);
                 count++;
             }
-            
         }
     } while (reader.Read());
 
     Console.WriteLine("Accounts parsed {0}", count);
 }
 
-bool TryParseBaseAccount(JsonTextReader reader)
+bool TryParseBaseAccount(JsonTextReader reader, out BaseAccount account)
 {
-    var account = new JsonSerializer().Deserialize<BaseAccount>(reader);
-    if (account == null) 
-        return false;
-
-    // Console.WriteLine(account.Address);
-    return true;
+    account = new JsonSerializer().Deserialize<BaseAccount>(reader);
+    return account != null;
 }
 
 void ParseAuthParams(JsonTextReader reader)
@@ -294,7 +299,7 @@ void ParseAuthz(JsonTextReader reader)
     Console.WriteLine("Authz parsing skipped");
 }
 
-void ParseBankBalances(JsonTextReader reader)
+async Task ParseBankBalancesAsync(JsonTextReader reader, IDbConnection connection)
 {
     Console.WriteLine("Parsing balances...");
     var count = 0;
@@ -303,8 +308,20 @@ void ParseBankBalances(JsonTextReader reader)
         if (reader.TokenType == JsonToken.EndArray && reader.Path == "app_state.bank.balances") break;
         if (reader.TokenType == JsonToken.StartObject)
         {
-            if (TryParseBankBalance(reader))
+            if (TryParseBankBalance(reader, out var balance))
             {
+                foreach (var coin in balance.Coins)
+                {
+                    var amount = BigInteger.Parse(coin.Amount);
+                    amount = BigInteger.Divide(amount, new BigInteger(1_000_000_000_000_000_000m));
+                    await connection.ExecuteAsync("INSERT INTO bank_balances (address, denom, amount) VALUES (@Address, @Denom, @Amount)", new
+                    {
+                        balance.Address,
+                        coin.Denom,
+                        Amount = ((decimal)amount)
+                    });
+                }
+               
                 count++;
             }
 
@@ -314,14 +331,10 @@ void ParseBankBalances(JsonTextReader reader)
     Console.WriteLine("Balances parsed {0}", count);
 }
 
-bool TryParseBankBalance(JsonTextReader reader)
+bool TryParseBankBalance(JsonTextReader reader, out BankBalance balance)
 {
-    var balance = new JsonSerializer().Deserialize<BankBalance>(reader);
-    if (balance == null)
-        return false;
-
-    // Console.WriteLine(account.Address);
-    return true;
+    balance = new JsonSerializer().Deserialize<BankBalance>(reader);
+    return balance != null;
 }
 
 void ParseBankDenomMetadata(JsonTextReader reader)
@@ -346,7 +359,7 @@ void ParseBankParams(JsonTextReader reader)
     Console.WriteLine("Bank params parsing skipped");
 }
 
-void ParseBankSupply(JsonTextReader reader)
+async Task ParseBankSupplyAsync(JsonTextReader reader, IDbConnection connection)
 {
     Console.WriteLine("Parsing bank supply...");
     var count = 0;
@@ -355,8 +368,16 @@ void ParseBankSupply(JsonTextReader reader)
         if (reader.TokenType == JsonToken.EndArray && reader.Path == "app_state.bank.supply") break;
         if (reader.TokenType == JsonToken.StartObject)
         {
-            if (TryParseBankSupply(reader))
+            if (TryParseBankSupply(reader, out var supply))
             {
+                var amount = BigInteger.Parse(supply.Amount);
+                amount = BigInteger.Divide(amount, new BigInteger(1_000_000_000_000_000_000m));
+                await connection.ExecuteAsync("INSERT INTO bank_supply (denom, amount) VALUES (@Denom, @Amount)", new
+                {
+                    supply.Denom,
+                    Amount = ((decimal)amount)
+                });
+
                 count++;
             }
 
@@ -366,14 +387,10 @@ void ParseBankSupply(JsonTextReader reader)
     Console.WriteLine("Bank supply parsed {0}", count);
 }
 
-bool TryParseBankSupply(JsonTextReader reader)
+bool TryParseBankSupply(JsonTextReader reader, out Coin coin)
 {
-    var coin = new JsonSerializer().Deserialize<Coin>(reader);
-    if (coin == null)
-        return false;
-
-    // Console.WriteLine(account.Address);
-    return true;
+    coin = new JsonSerializer().Deserialize<Coin>(reader);
+    return coin != null;
 }
 
 void ParseCapability(JsonTextReader reader)
@@ -387,7 +404,7 @@ void ParseCapability(JsonTextReader reader)
     Console.WriteLine("Capabilities parsing skipped");
 }
 
-void ParseClaimRecords(JsonTextReader reader)
+async Task ParseClaimRecordsAsync(JsonTextReader reader, IDbConnection connection)
 {
     Console.WriteLine("Parsing claim records...");
     var count = 0;
@@ -396,8 +413,16 @@ void ParseClaimRecords(JsonTextReader reader)
         if (reader.TokenType == JsonToken.EndArray && reader.Path == "app_state.claims.claims_records") break;
         if (reader.TokenType == JsonToken.StartObject)
         {
-            if (TryParseClaimRecord(reader))
+            if (TryParseClaimRecord(reader, out var claim))
             {
+                var amount = BigInteger.Parse(claim.InitialClaimableAmount);
+                amount = BigInteger.Divide(amount, new BigInteger(1_000_000_000_000_000_000m));
+                await connection.ExecuteAsync("INSERT INTO claim_records (address, amount) VALUES (@Denom, @Amount)", new
+                {
+                    claim.Address,
+                    Amount = ((decimal)amount)
+                });
+
                 count++;
             }
 
@@ -407,14 +432,10 @@ void ParseClaimRecords(JsonTextReader reader)
     Console.WriteLine("Claim records parsed {0}", count);
 }
 
-bool TryParseClaimRecord(JsonTextReader reader)
+bool TryParseClaimRecord(JsonTextReader reader, out ClaimRecord claim)
 {
-    var claim = new JsonSerializer().Deserialize<ClaimRecord>(reader);
-    if (claim == null)
-        return false;
-
-    // Console.WriteLine(account.Address);
-    return true;
+    claim = new JsonSerializer().Deserialize<ClaimRecord>(reader);
+    return claim != null;
 }
 
 void ParseClaimParams(JsonTextReader reader)
@@ -448,7 +469,7 @@ void ParseDistributionDelegatorStartingInfos(JsonTextReader reader)
         if (reader.TokenType == JsonToken.EndArray && reader.Path == "app_state.distribution.delegator_starting_infos") break;
         if (reader.TokenType == JsonToken.StartObject)
         {
-            if (TryParseDistributionDelegatorStartingInfo(reader))
+            if (TryParseDistributionDelegatorStartingInfo(reader, out var delegation))
             {
                 count++;
             }
@@ -459,14 +480,10 @@ void ParseDistributionDelegatorStartingInfos(JsonTextReader reader)
     Console.WriteLine("Distribution delegator starting infos parsed {0}", count);
 }
 
-bool TryParseDistributionDelegatorStartingInfo(JsonTextReader reader)
+bool TryParseDistributionDelegatorStartingInfo(JsonTextReader reader, out DistributionDelegatorStartingInfo delegation)
 {
-    var delegation = new JsonSerializer().Deserialize<DistributionDelegatorStartingInfo>(reader);
-    if (delegation == null)
-        return false;
-
-    // Console.WriteLine(account.Address);
-    return true;
+    delegation = new JsonSerializer().Deserialize<DistributionDelegatorStartingInfo>(reader);
+    return delegation != null;
 }
 
 void ParseDistributionDelegatorWithdrawInfos(JsonTextReader reader)
@@ -795,4 +812,24 @@ void ParseValidators(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Validators params parsing skipped");
+}
+
+async Task CreateTablesAsync(IDbConnection connection)
+{
+    // auth accounts
+    var sql = @"CREATE TABLE auth_accounts (address TEXT)";
+    Console.WriteLine(sql);
+    _ = await connection.ExecuteAsync(sql);
+
+    sql = @"CREATE TABLE bank_balances (address TEXT, denom TEXT, amount INTEGER)";
+    Console.WriteLine(sql);
+    _ = await connection.ExecuteAsync(sql);
+
+    sql = @"CREATE TABLE bank_supply (denom TEXT, amount INTEGER)";
+    Console.WriteLine(sql);
+    _ = await connection.ExecuteAsync(sql);
+
+    sql = @"CREATE TABLE claim_records (address TEXT, amount INTEGER)";
+    Console.WriteLine(sql);
+    _ = await connection.ExecuteAsync(sql);
 }
