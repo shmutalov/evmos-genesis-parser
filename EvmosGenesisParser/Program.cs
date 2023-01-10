@@ -424,7 +424,7 @@ async Task ParseClaimRecordsAsync(JsonTextReader reader, IDbConnection connectio
             {
                 var amount = BigInteger.Parse(claim.InitialClaimableAmount);
                 amount = BigInteger.Divide(amount, new BigInteger(1_000_000_000_000_000_000m));
-                await connection.ExecuteAsync("INSERT INTO claim_records (address, amount) VALUES (@Denom, @Amount)", new
+                await connection.ExecuteAsync("INSERT INTO claim_records (address, amount) VALUES (@Address, @Amount)", new
                 {
                     claim.Address,
                     Amount = ((decimal)amount)
@@ -824,19 +824,19 @@ void ParseValidators(JsonTextReader reader)
 async Task CreateTablesAsync(IDbConnection connection)
 {
     // auth accounts
-    var sql = @"CREATE TABLE auth_accounts (address TEXT)";
+    var sql = @"CREATE TABLE IF NOT EXISTS auth_accounts (address TEXT)";
     Console.WriteLine(sql);
     _ = await connection.ExecuteAsync(sql);
 
-    sql = @"CREATE TABLE bank_balances (address TEXT, denom TEXT, amount INTEGER)";
+    sql = @"CREATE TABLE IF NOT EXISTS bank_balances (address TEXT, denom TEXT, amount INTEGER)";
     Console.WriteLine(sql);
     _ = await connection.ExecuteAsync(sql);
 
-    sql = @"CREATE TABLE bank_supply (denom TEXT, amount INTEGER)";
+    sql = @"CREATE TABLE IF NOT EXISTS bank_supply (denom TEXT, amount INTEGER)";
     Console.WriteLine(sql);
     _ = await connection.ExecuteAsync(sql);
 
-    sql = @"CREATE TABLE claim_records (address TEXT, amount INTEGER)";
+    sql = @"CREATE TABLE IF NOT EXISTS claim_records (address TEXT, amount INTEGER)";
     Console.WriteLine(sql);
     _ = await connection.ExecuteAsync(sql);
 }
