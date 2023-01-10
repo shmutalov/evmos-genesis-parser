@@ -13,6 +13,13 @@ await connection.OpenAsync();
 
 await CreateTablesAsync(connection);
 
+var pragmas = @"PRAGMA synchronous=OFF;
+    PRAGMA count_changes=OFF;
+    PRAGMA journal_mode=MEMORY;
+    PRAGMA temp_store=MEMORY;
+    PRAGMA encoding=""UTF-8""";
+await connection.ExecuteAsync(pragmas);
+
 Console.WriteLine("Reading the Genesis...");
 
 using var f = File.OpenText("D:\\Projects\\mine\\evmos-genesis-parser\\EvmosGenesisParser\\genesis.json");
