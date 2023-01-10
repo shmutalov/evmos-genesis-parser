@@ -260,8 +260,6 @@ void ParseAuthAccounts(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Accounts parsed {0}", count);
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 bool TryParseBaseAccount(JsonTextReader reader)
@@ -283,8 +281,6 @@ void ParseAuthParams(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Auth params parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseAuthz(JsonTextReader reader)
@@ -296,8 +292,6 @@ void ParseAuthz(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Authz parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseBankBalances(JsonTextReader reader)
@@ -318,8 +312,6 @@ void ParseBankBalances(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Balances parsed {0}", count);
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 bool TryParseBankBalance(JsonTextReader reader)
@@ -341,8 +333,6 @@ void ParseBankDenomMetadata(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Bank denom metadata parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseBankParams(JsonTextReader reader)
@@ -354,8 +344,6 @@ void ParseBankParams(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Bank params parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseBankSupply(JsonTextReader reader)
@@ -376,8 +364,6 @@ void ParseBankSupply(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Bank supply parsed {0}", count);
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 bool TryParseBankSupply(JsonTextReader reader)
@@ -399,8 +385,6 @@ void ParseCapability(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Capabilities parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseClaimRecords(JsonTextReader reader)
@@ -421,8 +405,6 @@ void ParseClaimRecords(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Claim records parsed {0}", count);
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 bool TryParseClaimRecord(JsonTextReader reader)
@@ -444,8 +426,6 @@ void ParseClaimParams(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Claim params parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseCrisis(JsonTextReader reader)
@@ -457,8 +437,6 @@ void ParseCrisis(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Crisis parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseDistributionDelegatorStartingInfos(JsonTextReader reader)
@@ -479,8 +457,6 @@ void ParseDistributionDelegatorStartingInfos(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Distribution delegator starting infos parsed {0}", count);
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 bool TryParseDistributionDelegatorStartingInfo(JsonTextReader reader)
@@ -502,8 +478,6 @@ void ParseDistributionDelegatorWithdrawInfos(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Distribution delegator withdraw infos parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseDistributionFeePool(JsonTextReader reader)
@@ -515,8 +489,6 @@ void ParseDistributionFeePool(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Distribution fee pool parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseDistributionOutstandingRewards(JsonTextReader reader)
@@ -528,8 +500,6 @@ void ParseDistributionOutstandingRewards(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Distribution outstanding rewards parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseDistributionParams(JsonTextReader reader)
@@ -541,8 +511,6 @@ void ParseDistributionParams(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Distribution params parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseDistributionPreviousProposer(JsonTextReader reader)
@@ -552,8 +520,6 @@ void ParseDistributionPreviousProposer(JsonTextReader reader)
     reader.Read();
 
     Console.WriteLine("Distribution previous proposer parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseDistributionValidatorAccumulatedCommissions(JsonTextReader reader)
@@ -565,8 +531,6 @@ void ParseDistributionValidatorAccumulatedCommissions(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Distribution validator accumulated commissions parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseDistributionValidatorCurrentRewards(JsonTextReader reader)
@@ -578,8 +542,6 @@ void ParseDistributionValidatorCurrentRewards(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Distribution validator current rewards parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseDistributionValidatorHistoricalRewards(JsonTextReader reader)
@@ -591,8 +553,6 @@ void ParseDistributionValidatorHistoricalRewards(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Validator historical rewards parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseDistributionValidatorSlashEvents(JsonTextReader reader)
@@ -604,8 +564,6 @@ void ParseDistributionValidatorSlashEvents(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Distribution validator slash events parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseEpochs(JsonTextReader reader)
@@ -617,8 +575,6 @@ void ParseEpochs(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Epochs parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseErc20(JsonTextReader reader)
@@ -630,8 +586,6 @@ void ParseErc20(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("ERC20 parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseEvidence(JsonTextReader reader)
@@ -643,8 +597,6 @@ void ParseEvidence(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Evidence parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseEvmAccounts(JsonTextReader reader)
@@ -656,8 +608,6 @@ void ParseEvmAccounts(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("EVM accounts parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseEvmParams(JsonTextReader reader)
@@ -669,8 +619,6 @@ void ParseEvmParams(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("EVM params parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseFeeGrant(JsonTextReader reader)
@@ -682,8 +630,6 @@ void ParseFeeGrant(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Fee grant parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseFeeMarket(JsonTextReader reader)
@@ -695,8 +641,6 @@ void ParseFeeMarket(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Fee market parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseGenUtil(JsonTextReader reader)
@@ -708,8 +652,6 @@ void ParseGenUtil(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Genutil parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseGov(JsonTextReader reader)
@@ -721,8 +663,6 @@ void ParseGov(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Gov parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseIbc(JsonTextReader reader)
@@ -734,8 +674,6 @@ void ParseIbc(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("IBC parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseIncentives(JsonTextReader reader)
@@ -747,8 +685,6 @@ void ParseIncentives(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Incentives parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseInflation(JsonTextReader reader)
@@ -760,8 +696,6 @@ void ParseInflation(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Inflation parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseParams(JsonTextReader reader)
@@ -773,8 +707,6 @@ void ParseParams(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Params parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseSlashing(JsonTextReader reader)
@@ -786,8 +718,6 @@ void ParseSlashing(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Slashing parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseStaking(JsonTextReader reader)
@@ -799,8 +729,6 @@ void ParseStaking(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Staking parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseTransfer(JsonTextReader reader)
@@ -812,8 +740,6 @@ void ParseTransfer(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Transfer parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseUpgrade(JsonTextReader reader)
@@ -825,8 +751,6 @@ void ParseUpgrade(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Upgrade parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseVesting(JsonTextReader reader)
@@ -838,8 +762,6 @@ void ParseVesting(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Vesting parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseRecovery(JsonTextReader reader)
@@ -851,8 +773,6 @@ void ParseRecovery(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Recovery parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseConsensusParams(JsonTextReader reader)
@@ -864,8 +784,6 @@ void ParseConsensusParams(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Consensus params parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
 
 void ParseValidators(JsonTextReader reader)
@@ -877,6 +795,4 @@ void ParseValidators(JsonTextReader reader)
     } while (reader.Read());
 
     Console.WriteLine("Validators params parsing skipped");
-    Console.WriteLine("Press [ENTER] to continue parsing...");
-    Console.ReadLine();
 }
